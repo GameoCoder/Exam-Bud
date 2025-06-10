@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import UploadWidget from './UploadWidget';
 
 export default function UploadList({ subjectId }) {
   const [items, setItems] = useState([]);
@@ -35,8 +36,8 @@ export default function UploadList({ subjectId }) {
       <h2>Materials</h2>
       <form onSubmit={add}>
         <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" required/>
-        <input type="file" onChange={e=>setFile(e.target.files[0])} required/>
-        <button type="submit">Upload</button>
+        {/* <input type="file" onChange={e=>setFile(e.target.files[0])} required/> */}
+        <UploadWidget />
       </form>
       <ul>
         {items.map(u=>(
