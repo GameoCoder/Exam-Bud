@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import UploadWidget from './UploadWidget';
+import UploadModal from './Upload.jsx'
 
 export default function UploadList({ subjectId }) {
   const [items, setItems] = useState([]);
   const [title, setTitle] = useState('');
   const [file, setFile] = useState(null);
+  const [modalOpen, setmodalOpen] = useState(false);
 
   const load = ()=>fetch(`http://localhost:4000/subjects/${subjectId}/uploads`)
     .then(r=>r.json())
@@ -31,13 +33,31 @@ export default function UploadList({ subjectId }) {
     load();
   };
 
+   const handleUploadComplete = (selectedFile) => {
+    setFile(selectedFile);
+    setModalOpen(false);
+  };
+
   return (
     <div>
       <h2>Materials</h2>
       <form onSubmit={add}>
         <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" required/>
         {/* <input type="file" onChange={e=>setFile(e.target.files[0])} required/> */}
-        <UploadWidget />
+        {/* This is the button for Uploading */}
+        {/* <UploadWidget /> */}
+        <button type="button" onClick={() => setmodalOpen(true)}>
+          Select File
+        </button>
+
+        <button type="submit" disabled={!file}>
+          Upload
+        </button>
+        <UploadModal
+        open={modalOpen}
+        onClose={() => setmodalOpen(false)}
+        onComplete={handleUploadComplete}
+      />
       </form>
       <ul>
         {items.map(u=>(
