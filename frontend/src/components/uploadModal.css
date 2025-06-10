@@ -1,25 +1,20 @@
-/* ----------------------------------------------------------------------------
-   UploadModal – pure CSS styling
-   Designed to match Exam Bud figma (node 0-1) across three stages.
-   Variables: customize to match your design system.
------------------------------------------------------------------------------ */
 :root {
-  --umodal-bg            : #ffffff;
-  --umodal-radius        : 1rem;
-  --umodal-shadow        : 0 12px 24px rgba(0,0,0,.15);
-  --umodal-accent        : #635BFF;
-  --umodal-accent-light : #ECEBFF;
-  --umodal-text-primary  : #1d1d1f;
-  --umodal-text-secondary: #585858;
-  --umodal-border        : #E5E7EB;
+  --modal-bg            : #ffffff;
+  --modal-radius        : 1rem;
+  --modal-shadow        : 0 12px 24px rgba(0,0,0,.15);
+  --modal-accent        : #635BFF;
+  --modal-accent-light  : #ECEBFF;
+  --modal-text-primary  : #1d1d1f;
+  --modal-text-secondary: #585858;
+  --modal-border        : #E5E7EB;
 }
 
 /* ----- backdrop ---------------------------------------------------------------- */
-.umodal__backdrop {
+.modal-backdrop {
   position: fixed;
   inset: 0;
   backdrop-filter: blur(4px);
-  background: rgba(0,0,0,.35);
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,72 +22,86 @@
 }
 
 /* ----- modal card -------------------------------------------------------------- */
-.umodal__card {
-  background: var(--umodal-bg);
-  border-radius: var(--umodal-radius);
+.modal {
+  background: var(--modal-bg);
+  border-radius: var(--modal-radius);
   width: 92%;
   max-width: 460px;
-  box-shadow: var(--umodal-shadow);
+  box-shadow: var(--modal-shadow);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: umodal-fade .35s ease;
+  animation: modal-fade 0.35s ease;
 }
-@keyframes umodal-fade { from { opacity: 0; transform: translateY(8px);} to { opacity:1; transform: translateY(0);} }
+
+@keyframes modal-fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* ----- header ------------------------------------------------------------------ */
-.umodal__header {
+.modal-header {
   padding: 1rem 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--umodal-border);
+  border-bottom: 1px solid var(--modal-border);
 }
-.umodal__title {
+
+.modal-title {
   font-size: 1.15rem;
   font-weight: 600;
-  color: var(--umodal-text-primary);
+  color: var(--modal-text-primary);
 }
-.umodal__close {
+
+.modal-close {
   background: transparent;
   border: none;
   font-size: 1.25rem;
   cursor: pointer;
   line-height: 1;
-  color: var(--umodal-text-secondary);
+  color: var(--modal-text-secondary);
 }
-.umodal__close:hover { color: var(--umodal-text-primary); }
+.modal-close:hover {
+  color: var(--modal-text-primary);
+}
 
 /* ----- body -------------------------------------------------------------------- */
-.umodal__body { padding: 2rem 1.75rem; text-align: center; }
+.modal-body {
+  padding: 2rem 1.75rem;
+  text-align: center;
+}
 
-/* Initial stage – dropzone ------------------------------------------------------ */
-.umodal__dropzone {
-  border: 2px dashed rgba(255, 255, 255, 0.7); /* soft white dash */
+/* Dropzone (initial stage) ------------------------------------------------------ */
+.dropzone {
+  border: 2px dashed rgba(255, 255, 255, 0.7);
   border-radius: 1rem;
   padding: 2.5rem 1rem;
   cursor: pointer;
-  background-color: #0b2a58; /* deep navy from your image */
+  background-color: #0b2a58;
   transition: border-color 0.3s, box-shadow 0.3s;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-.umodal__dropzone.is-active {
+.dropzone.active {
   border-color: #ffffff;
-  background-color: #123a6d; /* slight hover change */
+  background-color: #123a6d;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.25);
 }
-.umodal__dz-headline {
+
+.dropzone-headline {
   font-weight: 600;
   color: white;
   font-size: 1.15rem;
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
 }
-.umodal__dz-subtext {
-  color: #d1d5db; /* light gray */
+
+.dropzone-subtext {
+  color: #d1d5db;
   font-size: 0.95rem;
 }
-.umodal__browse {
+
+.dropzone-browse {
   color: #93c5fd;
   font-weight: 600;
   text-decoration: underline;
@@ -100,55 +109,91 @@
 }
 
 /* Uploading stage --------------------------------------------------------------- */
-.umodal__uploading { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
-.umodal__file-meta { text-align: center; }
-.umodal__file-name { font-weight: 600; }
-.umodal__file-size { font-size: .875rem; color: var(--umodal-text-secondary); }
+.uploading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
 
-.umodal__progress-wrapper {
+.file-meta {
+  text-align: center;
+}
+.file-name {
+  font-weight: 600;
+}
+.file-size {
+  font-size: 0.875rem;
+  color: var(--modal-text-secondary);
+}
+
+.progress-wrapper {
   width: 100%;
-  height: .55rem;
-  background: var(--umodal-border);
-  border-radius: .35rem;
+  height: 0.55rem;
+  background: var(--modal-border);
+  border-radius: 0.35rem;
   overflow: visible;
 }
-.umodal__progress-bar {
+
+.progress-bar {
   height: 100%;
-  background: var(--umodal-accent);
-  transition: width .25s ease;
+  background: var(--modal-accent);
+  transition: width 0.25s ease;
 }
 
 /* Success stage ----------------------------------------------------------------- */
-.umodal__success { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
-.umodal__check {
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.success-check {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background: var(--umodal-accent);
+  background: var(--modal-accent);
   color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
 }
-.umodal__success-headline { font-size: 1.25rem; font-weight: 600; margin: 0; }
-.umodal__success-subtext { color: var(--umodal-text-secondary); margin: 0; }
 
-/* Shared buttons ---------------------------------------------------------------- */
-.umodal__primary {
-  padding: .65rem 2.25rem;
-  border-radius: .5rem;
-  background: var(--umodal-accent);
+.success-headline {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.success-subtext {
+  color: var(--modal-text-secondary);
+  margin: 0;
+}
+
+/* Buttons ----------------------------------------------------------------------- */
+.button-primary {
+  padding: 0.65rem 2.25rem;
+  border-radius: 0.5rem;
+  background: var(--modal-accent);
   color: #fff;
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: opacity .25s;
+  transition: opacity 0.25s;
 }
-.umodal__primary:disabled { opacity: .6; cursor: not-allowed; }
+.button-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-/* ----- responsive tweaks ------------------------------------------------------- */
+/* Responsive tweaks ------------------------------------------------------------- */
 @media (max-width: 375px) {
-  .umodal__body { padding: 1.5rem 1.25rem; }
-  .umodal__card { max-width: 90%; }
+  .modal-body {
+    padding: 1.5rem 1.25rem;
+  }
+  .modal {
+    max-width: 90%;
+  }
 }
