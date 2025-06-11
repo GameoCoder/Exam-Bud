@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import UploadWidget from './UploadWidget';
 import UploadModal from './Upload.jsx'
 
 export default function UploadList({ subjectId }) {
@@ -7,6 +6,7 @@ export default function UploadList({ subjectId }) {
   const [title, setTitle] = useState('');
   const [file, setFile] = useState(null);
   const [modalOpen, setmodalOpen] = useState(false);
+  // const [stage, setStage] = useState("select")
 
   const load = ()=>fetch(`http://localhost:4000/subjects/${subjectId}/uploads`)
     .then(r=>r.json())
@@ -33,12 +33,13 @@ export default function UploadList({ subjectId }) {
     load();
   };
 
-   const handleUploadComplete = (selectedFile) => {
-    setFile(selectedFile);
-    setmodalOpen(false);
+   const handleUploadComplete = async (selectedFile) => {
+    setFile(selectedFile)
+    setmodalOpen(false)
+    await handleUpload(selectedFile, title.trim())
   };
 
-  const handleUpload = async () => {
+  const handleUpload = async (fileToUpload, fileTitle) => {
     const formData = new FormData()
     formData.append("file", file)
     formData.append("upload_preset", "cloudsave")
@@ -52,11 +53,23 @@ export default function UploadList({ subjectId }) {
       const data = await res.json()
       console.log("Upload Successful:", data)
       alert("Upload Complete!")
+      setFile(null)
+      setTitle("")
+      // Remove comments after backend is good to go
+      // load()
     } catch(err) {
       console.error("Upload Failed:", err)
       alert("Upload Failed.")
     }
   }
+
+  const handleButtonClick = () => {
+    if (title.trim() === "") {
+      alert("Please enter a title before uploading.")
+      return
+    }
+    setmodalOpen(true) // triggers file selection
+}
 
   return (
     <div>
@@ -66,13 +79,10 @@ export default function UploadList({ subjectId }) {
         {/* <input type="file" onChange={e=>setFile(e.target.files[0])} required/> */}
         {/* This is the button for Uploading */}
         {/* <UploadWidget /> */}
-        <button type="button" onClick={() => setmodalOpen(true)}>
-          Select File
-        </button>
-
-        <button type="submit" disabled={!file || title.trim() === ""} onClick={handleUpload}>
+        <button type="button" onClick={handleButtonClick}>
           Upload
         </button>
+
         <UploadModal
         open={modalOpen}
         onClose={() => setmodalOpen(false)}

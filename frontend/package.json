@@ -10,10 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cloudinary": "^2.6.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+<<<<<<< HEAD
     "react-dropzone": "^14.3.8",
     "react-router-dom": "^7.6.0"
+=======
+    "react-router-dom": "^7.6.0",
+    "react-dropzone": "^14.3.8"
+>>>>>>> b7bacbe3f28707ec0040a14caf9afd0f7812b2e0
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
