@@ -35,8 +35,28 @@ export default function UploadList({ subjectId }) {
 
    const handleUploadComplete = (selectedFile) => {
     setFile(selectedFile);
-    setModalOpen(false);
+    setmodalOpen(false);
   };
+
+  const handleUpload = async () => {
+    const formData = new FormData()
+    formData.append("file", file)
+    formData.append("upload_preset", "cloudsave")
+    formData.append("public_id", title)
+
+    try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/dliibgsez/upload", {
+        method: "POST",
+        body: formData,
+      })
+      const data = await res.json()
+      console.log("Upload Successful:", data)
+      alert("Upload Complete!")
+    } catch(err) {
+      console.error("Upload Failed:", err)
+      alert("Upload Failed.")
+    }
+  }
 
   return (
     <div>
@@ -50,7 +70,7 @@ export default function UploadList({ subjectId }) {
           Select File
         </button>
 
-        <button type="submit" disabled={!file}>
+        <button type="submit" disabled={!file || title.trim() === ""} onClick={handleUpload}>
           Upload
         </button>
         <UploadModal
