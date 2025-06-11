@@ -1,3 +1,4 @@
+// uploadController.js
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { ApiError } = require('../utils/ApiError');
@@ -14,17 +15,20 @@ const fetchUploads = asyncHandler(async (req, res, next) => {
 });
 
 const uploadMaterial = asyncHandler(async (req, res, next) => {
-    const { title } = req.body;
-    if (!req.file) {
-      return next(new ApiError(400, "File is required"));
+    // Now expecting 'title' and 'url' directly in the request body (JSON payload from frontend)
+    const { title, url } = req.body; // Destructure both title and url
+
+    // Validate that both are present
+    if (!title || !url) {
+      return next(new ApiError(400, "Title and Cloudinary URL are required"));
     }
 
-    const fileUrl = `/uploads/${req.file.filename}`;
+    // No need for req.file or constructing local file paths anymore
 
     const upload = await prisma.upload.create({
       data: {
         title,
-        url: fileUrl,
+        url, // Directly use the 'url' received from the frontend (Cloudinary URL)
         subjectId: +req.params.sid,
         userId: req.user.id
       }
@@ -33,6 +37,8 @@ const uploadMaterial = asyncHandler(async (req, res, next) => {
 });
 
 const deleteUpload = asyncHandler(async (req, res, next) => {
+  // Potentially, if you want to delete from Cloudinary too, you'd add Cloudinary API call here
+  // You would need to store Cloudinary's public_id along with the URL in your DB to do this easily.
   const deleted = await prisma.upload.delete({
     where: { id: +req.params.id }
   });
