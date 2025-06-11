@@ -4,7 +4,6 @@ import UploadModal from './Upload.jsx'
 export default function UploadList({ subjectId }) {
   const [items, setItems] = useState([]);
   const [title, setTitle] = useState('');
-  const [file, setFile] = useState(null); // Still needed to hold the selected file temporarily
   const [modalOpen, setmodalOpen] = useState(false);
 
   const load = () => fetch(`http://localhost:4000/subjects/${subjectId}/uploads`)
@@ -29,7 +28,6 @@ export default function UploadList({ subjectId }) {
       body: JSON.stringify(payload)
     });
     setTitle(''); 
-    setFile(null);
     load();
   };
 
@@ -56,7 +54,6 @@ export default function UploadList({ subjectId }) {
       const cloudinaryUrl = data.secure_url || data.url;
       console.log(title);console.log(cloudinaryUrl)
       await add(title, cloudinaryUrl);
-      setFile(null)
       setTitle("")
 
     } catch (err) {
@@ -66,7 +63,6 @@ export default function UploadList({ subjectId }) {
   };
 
   const handleUploadComplete = async (selectedFile) => {
-    setFile(selectedFile)
     setmodalOpen(false)
     await handleUpload(selectedFile, title.trim())
   }
@@ -76,7 +72,7 @@ export default function UploadList({ subjectId }) {
       alert("Please enter a title before uploading.")
       return
   }
-  setmodalOpen(true) // triggers file selection
+  setmodalOpen(true)
 }
 
   return (
