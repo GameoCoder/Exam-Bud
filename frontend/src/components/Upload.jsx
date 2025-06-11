@@ -20,23 +20,43 @@ export default function UploadModal({ open, onClose, onComplete }) {
   });
 
   useEffect(() => {
-    if (stage !== "uploading") return;
+  if (stage !== "uploading" || !file) return;
 
-    let pct = 0;
-    setProgress(0);
-    const timer = setInterval(() => {
-      pct += 5 + Math.random() * 10;
-      if (pct >= 100) {
-        clearInterval(timer);
-        setProgress(100);
-        setStage("success");
-      } else {
-        setProgress(Math.round(pct));
-      }
-    }, 250);
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "cloudsave"); // your unsigned preset
 
-    return () => clearInterval(timer);
-  }, [stage]);
+  const xhr = new XMLHttpRequest();
+  xhr.open("POST", "https://api.cloudinary.com/v1_1/dliibgsez/upload");
+
+  xhr.upload.onprogress = (event) => {
+    if (event.lengthComputable) {
+      const pct = Math.round((event.loaded * 100) / event.total);
+      setProgress(pct);
+    }
+  };
+
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      console.log("Upload success:", JSON.parse(xhr.response));
+      setProgress(100);
+      setStage("success");
+    } else {
+      console.error("Upload failed:", xhr.responseText);
+      alert("Upload failed.");
+      setStage("initial");
+    }
+  };
+
+  xhr.onerror = () => {
+    console.error("Upload error");
+    alert("Upload failed.");
+    setStage("initial");
+  };
+
+  xhr.send(formData);
+}, [stage, file]);
+
 
   const handleSave = () => {
     onClose?.();
