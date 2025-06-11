@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import UploadModal from './Upload.jsx'
 
 export default function UploadList({ subjectId }) {
   const [items, setItems] = useState([]);
   const [title, setTitle] = useState('');
   const [file, setFile] = useState(null); // Still needed to hold the selected file temporarily
+  const [modalOpen, setmodalOpen] = useState(false);
 
   const load = () => fetch(`http://localhost:4000/subjects/${subjectId}/uploads`)
     .then(r => r.json())
@@ -11,13 +13,10 @@ export default function UploadList({ subjectId }) {
 
   useEffect(load, [subjectId]);
 
-  // Modified 'add' function: Now accepts the Cloudinary URL
   const add = async (uploadTitle, cloudinaryUrl) => {
-    // We are no longer sending the file itself to the local backend.
-    // Instead, we send the title and the Cloudinary URL.
     const payload = {
       title: uploadTitle,
-      url: cloudinaryUrl // This will be the Cloudinary URL
+      url: cloudinaryUrl
     };
 
     await fetch(`http://localhost:4000/subjects/${subjectId}/uploads`, {
@@ -25,13 +24,13 @@ export default function UploadList({ subjectId }) {
       headers: { 
         'x-user-id': 1, 
         'x-user-role': 'USER',
-        'Content-Type': 'application/json' // Set content type for JSON body
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(payload) // Send payload as JSON
+      body: JSON.stringify(payload)
     });
     setTitle(''); 
-    setFile(null); // Clear the file selection
-    load(); // Reload items after successful addition
+    setFile(null);
+    load();
   };
 
   const del = async id => {
@@ -39,16 +38,11 @@ export default function UploadList({ subjectId }) {
     load();
   };
 
-  const handleUpload = async () => {
-    if (!file || title.trim() === "") {
-        alert("Please select a file and enter a title.");
-        return;
-    }
-
+  const handleUpload = async (fileToUpload,fileTitle) => {
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", fileToUpload);
     formData.append("upload_preset", "cloudsave");
-    formData.append("public_id", title); // Optional: Use title as public_id
+    formData.append("public_id", fileTitle); // Optional: Use title as public_id
 
     try {
       // 1. Upload to Cloudinary
@@ -59,11 +53,11 @@ export default function UploadList({ subjectId }) {
       const data = await res.json();
       console.log("Cloudinary Upload Successful:", data);
       alert("Cloudinary Upload Complete!");
-
-      const cloudinaryUrl = data.secure_url || data.url; // Get the URL from Cloudinary response
-
-      // 2. Call the 'add' function with the title and Cloudinary URL
+      const cloudinaryUrl = data.secure_url || data.url;
+      console.log(title);console.log(cloudinaryUrl)
       await add(title, cloudinaryUrl);
+      setFile(null)
+      setTitle("")
 
     } catch (err) {
       console.error("Upload Failed:", err);
@@ -71,16 +65,33 @@ export default function UploadList({ subjectId }) {
     }
   };
 
+  const handleUploadComplete = async (selectedFile) => {
+    setFile(selectedFile)
+    setmodalOpen(false)
+    await handleUpload(selectedFile, title.trim())
+  }
+
+  const handleButtonClick = () => {
+    if (title.trim() === "") {
+      alert("Please enter a title before uploading.")
+      return
+  }
+  setmodalOpen(true) // triggers file selection
+}
+
   return (
     <div>
       <h2>Materials</h2>
       <form onSubmit={e => e.preventDefault()}> 
         <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Title" required />
-        <input type="file" onChange={e => setFile(e.target.files[0])} required />
-
-        <button type="button" onClick={handleUpload} disabled={!file || title.trim() === ""}>
+        <button type="button" onClick={handleButtonClick} disabled={title.trim() === ""}>
           Upload
         </button>
+        <UploadModal 
+        open={modalOpen}
+        onClose={() => setmodalOpen(false)}
+        onComplete={handleUploadComplete}
+        />
       </form>
       <ul>
         {items.map(u => (
