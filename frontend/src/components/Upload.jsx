@@ -3,10 +3,11 @@ import { createPortal } from "react-dom";
 import { useDropzone } from "react-dropzone";
 import "./uploadModal.css";
 
-export default function UploadModal({ open, onClose, onComplete }) {
+export default function UploadModal({ open, onClose, onComplete, title }) {
   const [stage, setStage] = useState("initial");
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [uploadedUrl, setUploadedUrl] = useState(null);
 
   const onDrop = useCallback((acceptedFiles) => {
     if (!acceptedFiles.length) return;
@@ -20,51 +21,58 @@ export default function UploadModal({ open, onClose, onComplete }) {
   });
 
   useEffect(() => {
-  if (stage !== "uploading" || !file) return;
+    if (stage !== "uploading" || !file) return;
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", "cloudsave"); // your unsigned preset
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "cloudsave");
+    formData.append("public_id", title); // Use title as public_id
 
-  const xhr = new XMLHttpRequest();
-  xhr.open("POST", "https://api.cloudinary.com/v1_1/dliibgsez/upload");
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://api.cloudinary.com/v1_1/dliibgsez/upload");
 
-  xhr.upload.onprogress = (event) => {
-    if (event.lengthComputable) {
-      const pct = Math.round((event.loaded * 100) / event.total);
-      setProgress(pct);
-    }
-  };
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const pct = Math.round((event.loaded * 100) / event.total);
+        setProgress(pct);
+      }
+    };
 
-  xhr.onload = () => {
-    if (xhr.status === 200) {
-      console.log("Upload success:", JSON.parse(xhr.response));
-      setProgress(100);
-      setStage("success");
-    } else {
-      console.error("Upload failed:", xhr.responseText);
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        const response = JSON.parse(xhr.response);
+        console.log("Upload success:", response);
+        setUploadedUrl(response.secure_url);
+        setProgress(100);
+        setStage("success");
+      } else {
+        console.error("Upload failed:", xhr.responseText);
+        alert("Upload failed.");
+        setStage("initial");
+      }
+    };
+
+    xhr.onerror = () => {
+      console.error("Upload error");
       alert("Upload failed.");
       setStage("initial");
-    }
-  };
+    };
 
-  xhr.onerror = () => {
-    console.error("Upload error");
-    alert("Upload failed.");
-    setStage("initial");
-  };
-
-  xhr.send(formData);
-}, [stage, file]);
-
+    xhr.send(formData);
+  }, [stage, file, title]);
 
   const handleSave = () => {
     onClose?.();
   };
 
   const handleNext = () => {
-    onComplete?.(file);
-    onClose?.();
+    if (uploadedUrl) {
+      onComplete?.({
+        url: uploadedUrl,
+        public_id: title,
+      });
+      onClose?.();
+    }
   };
 
   const humanSize = (bytes) => {
@@ -83,11 +91,7 @@ export default function UploadModal({ open, onClose, onComplete }) {
         {/* Header */}
         <div className="modal-header">
           <h2 className="modal-title">Upload Your File</h2>
-          <button
-            className="modal-close"
-            onClick={onClose}
-            aria-label="Close modal"
-          >
+          <button className="modal-close" onClick={onClose} aria-label="Close modal">
             ×
           </button>
         </div>
@@ -115,10 +119,7 @@ export default function UploadModal({ open, onClose, onComplete }) {
               </div>
 
               <div className="progress-wrapper">
-                <div
-                  className="progress-bar"
-                  style={{ width: `${progress}%` }}
-                />
+                <div className="progress-bar" style={{ width: `${progress}%` }} />
               </div>
 
               <button

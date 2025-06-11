@@ -1,50 +1,90 @@
-## STEPS
-
-Thought there would be a lot of steps, hehe ?
-
-```bash
-docker compose up --build -d
+---
+```
+⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣶⣶⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  
+⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠀⠀⠈⠉⠛⠿⣷⣄⠀⠀⠀⠀⠀⠀  
+⠀⠀⠀⢀⣴⣿⠟⠁   E X A M - B U D   ⠈⠻⣿⣦⡀⠀⠀  
+⠀⠀⢀⣿⠟⠁⠀⠀⠉⠁      ⠈⠉⠀⠀⠈⠻⣿⣆⠀⠀  
+⠀⠀⣼⠋⠀⢀⣤⣶⣾⣷⣶⣤⡀⠀⠀⠀⣴⣶⣾⣿⣿⡇⠀⠀  
+⠀⢸⣿⠀⢰⣿⠟⠉⠀⠈⠙⣿⣿⠀⠀⠘⠿⠿⠿⠿⠛⠁⠀⠀  
+⠀⠘⣿⣷⣌⡛⢷⣦⣀⣀⣴⠿⠋⠀⠀⠀⠀⣀⣀⣤⡄⠀⠀⠀  
+⠀⠀⠈⠛⠿⠿⠿⠿⠿⠿⠋⠀⠀⠀⠀⠀⠀⠉⠛⠋⠀⠀⠀⠀
 ```
 
-Before you do all of these -- 
+# 📘 Exam-Bud: Because finals are temporary, but Git commits are forever.
 
-In the backend folder change the name of the file `.env.sample` to only `.env`
+---
 
-Do a `npm install` inside the frontend and backend directory both, and yeah have docker installed and the docker daemon should be running behind in your local machine. 🙂
+### 🧠 What's This?
+
+Look man, I cloned this from some college GSoC-style thing. If you want the *corporate-sounding* explanation, go [**here**](https://github.com/bsoc-bitbyte/Exam-Bud/blob/main/README.md).
+If you're still here, welcome to the **scuffed but soulful** edition.
+
+---
+
+### 🔩 How It Works (probably?)
+
+> “It's not a bug, it's an undocumented feature.”
+
+#### 💅 Frontend:
+
+* ReactJS (because what else?)
+* Vite (yes it's also here for...reasons)
+
+#### 🔌 Backend:
+
+* **ExpressJS** – Connects stuff
+* **Multer** – Handles file uploads (hanging by a thread, soon to be cancelled 🪦)
+* **PrismaDB** – Makes SQL look like JSON
+* **Cloudinary** – For when you don’t want to store files like a normal person
+* **Docker Daemon** – Not the backend, but always lurking like Batman in a corner
+
+---
+
+### 🧪 How to Run This Without Rage Quitting
+
+> *Tested on Arch Linux because I need you to know I use Arch.*
+
+#### Step 1: Summon the Daemon
 
 ```bash
-cd <project-name>
+sudo systemctl start docker.service
 ```
+
+> *"If you see 'systemctl: command not found', i need you to know, I USE ARCH BTW"*
+> *“If you see ‘cannot connect to daemon’, summon it harder.”*
+
+#### Step 2: Channel the Containers
 
 ```bash
-cd backend
-npm install
+sudo docker compose up --build -d
 ```
 
-Do a `cd ..` to get out of the backend directory so that you can move into the frontend one. You can either do this or open a new terminal and run your frontend directory commands there. Your choice !!
+#### Bonus Level: Automate like a lazy genius 🧙‍♀️
 
 ```bash
-cd frontend
-npm install
+touch run.sh
+echo "sudo systemctl start docker.service; sudo docker compose up --build -d" > run.sh
+chmod +x run.sh
+./run.sh
 ```
 
-Do a `cd ..` to get out of the frontend directory so that you can move out to the root project directory. You can either do this or open a new terminal. Your choice !!
+---
 
-```bash
-cd ..
-docker compose up --build -d
-```
-NOTE - The `docker compose` command is to be ran at the `root`. This means you need to run this when your terminal shows you are in `exam-bud` only, not inside any other directory of `exam-bud`
+### 🤡 Developer Notes
 
-After everything has ran successfully check for something like this -- 
+* Works best when you have no idea what you’re doing
+* Ask ChatGPT when things break (which they will)
+* Do not run on production unless you hate uptime
+* Commit messages must include one meme reference or your PR is invalid
 
-<img width="825" alt="Screenshot 2025-05-26 at 2 48 25 AM" src="https://github.com/user-attachments/assets/bc617a55-7945-421f-bb26-8c21b2295e63" />
+---
 
-Voila, you are done with the setup !
+### 🛐 Final Thoughts
 
-Open your favourite browser, in the url portion type `localhost:3001` pray to God, and hit enter. You should be able to access the website. 
+> "It works on my machine" — Ancient Dev Proverb
+>
+> “This repo is like a pizza. Messy, but satisfying.” — Me, just now
 
-Have doubts? Ping me up personally on discord or use the `exam-bud-discussions` public discord channel and yeah do tag me as well !!
+---
 
-
-After the session I will be adding the resources underneath here and you guys can always take a look into that for Git Commands and Setup
+If this doesn't get you hired, I don’t know what will. 🐸👌
