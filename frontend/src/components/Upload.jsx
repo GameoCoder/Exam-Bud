@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useDropzone } from "react-dropzone";
 import "./uploadModal.css"; // Ensure your CSS is imported
 
-export default function UploadModal({ open, onClose, onComplete }) {
+export default function UploadModal({ open, onClose, onComplete, title }) {
   // State to manage the modal's workflow:
   // "initial": User can drop/select file
   // "selected": File chosen, ready to upload (showing details and Save button)
@@ -49,7 +49,7 @@ export default function UploadModal({ open, onClose, onComplete }) {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "cloudsave"); // Your unsigned preset
-    // formData.append("public_id", title); //dont know
+    formData.append("public_id", title);
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "https://api.cloudinary.com/v1_1/dliibgsez/upload");
