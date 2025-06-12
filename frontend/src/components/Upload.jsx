@@ -52,7 +52,8 @@ export default function UploadModal({ open, onClose, onComplete, title }) {
     formData.append("public_id", title);
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://api.cloudinary.com/v1_1/dliibgsez/upload");
+    const CLOUDINARY_PUBLIC_ID=process.env.CLOUDINARY_PUBLIC_ID
+    xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY_PUBLIC_ID}/upload`);
 
     // Event listener for upload progress
     xhr.upload.onprogress = (event) => {

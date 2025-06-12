@@ -37,7 +37,6 @@ export default function UploadList({ subjectId }) {
   };
 
   const handleUploadComplete = async ({ url, public_id}) => {
-    console.log(url," and ",public_id)
     await add(public_id, url);
     setTitle("")
     setmodalOpen(false)
