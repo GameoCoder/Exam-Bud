@@ -1,12 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700&display=swap');
+
 :root {
-  --modal-bg            : #ffffff;
-  --modal-radius        : 1rem;
-  --modal-shadow        : 0 12px 24px rgba(0,0,0,.15);
-  --modal-accent        : #635BFF;
-  --modal-accent-light  : #ECEBFF;
-  --modal-text-primary  : #1d1d1f;
-  --modal-text-secondary: #585858;
-  --modal-border        : #E5E7EB;
+  --modal-bg            : #0b2a58; /* A dark background, similar to your images */
+  --modal-text-primary  : #ffffff; /* White text for main content */
+  --modal-text-secondary: #d1d5db; /* Lighter grey for secondary text */
+  --modal-border        : #0b2a58; /* Darker border, less visible against dark bg */
+  --modal-accent        : #635BFF; /* Keep your existing accent color (purple) for buttons/progress */
+
+  /* The success checkmark uses a different accent color (green) */
+  --success-color       : #28a745; /* A vibrant green for success */
+  --modal-radius        : 1.5rem;
 }
 
 /* ----- backdrop ---------------------------------------------------------------- */
@@ -46,29 +49,39 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--modal-border);
+  position: relative;
 }
 
 .modal-title {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--modal-text-primary);
+  font-family: 'Urbanist', sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  flex-grow: 1;
 }
 
 .modal-close {
+  position: absolute;
+  top: 10%;
+  right: 0.15rem;
+  font-size: 1.75rem;
   background: transparent;
   border: none;
-  font-size: 1.25rem;
+  color: var(--modal-text-secondary);
   cursor: pointer;
   line-height: 1;
-  color: var(--modal-text-secondary);
+  z-index: 10;
+  transition: transform 0.15s ease;
 }
 .modal-close:hover {
   color: var(--modal-text-primary);
+  transform: scale(1.2);
 }
 
 /* ----- body -------------------------------------------------------------------- */
 .modal-body {
-  padding: 2rem 1.75rem;
+  padding: 0.75rem 1.75rem 2rem 1.75rem;
   text-align: center;
 }
 
@@ -77,10 +90,21 @@
   border: 2px dashed rgba(255, 255, 255, 0.7);
   border-radius: 1rem;
   padding: 2.5rem 1rem;
-  cursor: pointer;
+  /* cursor: pointer; */
   background-color: #0b2a58;
   transition: border-color 0.3s, box-shadow 0.3s;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dropzone-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  color: #93c5fd
 }
 
 .dropzone.active {
@@ -89,16 +113,26 @@
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.25);
 }
 
-.dropzone-headline {
+/* .dropzone-headline {
   font-weight: 600;
   color: white;
   font-size: 1.15rem;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0;
 }
 
 .dropzone-subtext {
   color: #d1d5db;
   font-size: 0.95rem;
+  margin-top: 0;
+} */
+
+.dropzone-combined-text {
+  font-family: 'Urbanist', sans-serif;
+  font-weight: 600; /* As per the headline in your image */
+  color: white; /* As per the headline in your image */
+  font-size: 1.15rem; /* As per the headline in your image */
+  margin: 0; /* Remove default paragraph margins */
+  white-space: nowrap; /* Prevent wrapping if there's enough space */
 }
 
 .dropzone-browse {
@@ -106,6 +140,9 @@
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
+  display: inline;
+  padding: 0;
+  margin: 0;
 }
 
 /* Uploading stage --------------------------------------------------------------- */
@@ -120,9 +157,11 @@
   text-align: center;
 }
 .file-name {
+  font-family: 'Urbanist', sans-serif;
   font-weight: 600;
 }
 .file-size {
+  font-family: 'Urbanist', sans-serif;
   font-size: 0.875rem;
   color: var(--modal-text-secondary);
 }
@@ -130,15 +169,17 @@
 .progress-wrapper {
   width: 100%;
   height: 0.55rem;
-  background: var(--modal-border);
-  border-radius: 0.35rem;
+  background: #ffffff;
+  border-radius: 999px;
   overflow: visible;
 }
 
 .progress-bar {
   height: 100%;
-  background: var(--modal-accent);
+  background: #4caf50;
+  /* color: #4caf50; */
   transition: width 0.25s ease;
+  border-radius: 999px;
 }
 
 /* Success stage ----------------------------------------------------------------- */
@@ -149,12 +190,12 @@
   gap: 1rem;
 }
 
-.success-check {
+.success-icon {
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background: var(--modal-accent);
-  color: #fff;
+  background: green;
+  /* color: #fff; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -162,31 +203,54 @@
 }
 
 .success-headline {
+  font-family: 'Urbanist', sans-serif;
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
 }
 
-.success-subtext {
+/* .success-subtext {
   color: var(--modal-text-secondary);
   margin: 0;
-}
+} */
 
 /* Buttons ----------------------------------------------------------------------- */
 .button-primary {
   padding: 0.65rem 2.25rem;
-  border-radius: 0.5rem;
-  background: var(--modal-accent);
-  color: #fff;
+  border-radius: 999px;
+  background: transparent;
+  color: white;
   font-weight: 600;
-  border: none;
+  border: 2px solid white;
   cursor: pointer;
   transition: opacity 0.25s;
 }
+
+.button-primary:hover{
+  background: lightblue;
+  color: navy;
+  border: none;
+}
+
 .button-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* .button-secondary {
+  padding: 0.65rem 2.25rem;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--modal-text-secondary); 
+  border: 1px solid var(--modal-border); 
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.25s, color 0.25s, border-color 0.25s;
+}
+.button-secondary:hover {
+  color: var(--modal-text-primary);
+  border-color: var(--modal-text-primary);
+} */
 
 /* Responsive tweaks ------------------------------------------------------------- */
 @media (max-width: 375px) {
