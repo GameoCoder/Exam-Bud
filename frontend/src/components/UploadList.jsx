@@ -36,35 +36,11 @@ export default function UploadList({ subjectId }) {
     load();
   };
 
-  const handleUpload = async (fileToUpload,fileTitle) => {
-    const formData = new FormData();
-    formData.append("file", fileToUpload);
-    formData.append("upload_preset", "cloudsave");
-    formData.append("public_id", fileTitle); // Optional: Use title as public_id
-
-    try {
-      // 1. Upload to Cloudinary
-      const res = await fetch("https://api.cloudinary.com/v1_1/dliibgsez/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      console.log("Cloudinary Upload Successful:", data);
-      alert("Cloudinary Upload Complete!");
-      const cloudinaryUrl = data.secure_url || data.url;
-      console.log(title);console.log(cloudinaryUrl)
-      await add(title, cloudinaryUrl);
-      setTitle("")
-
-    } catch (err) {
-      console.error("Upload Failed:", err);
-      alert("Upload Failed.");
-    }
-  };
-
-  const handleUploadComplete = async (selectedFile) => {
+  const handleUploadComplete = async ({ url, public_id}) => {
+    console.log(url," and ",public_id)
+    await add(public_id, url);
+    setTitle("")
     setmodalOpen(false)
-    await handleUpload(selectedFile, title.trim())
   }
 
   const handleButtonClick = () => {
@@ -87,12 +63,12 @@ export default function UploadList({ subjectId }) {
         open={modalOpen}
         onClose={() => setmodalOpen(false)}
         onComplete={handleUploadComplete}
+        title={title}
         />
       </form>
       <ul>
         {items.map(u => (
           <li key={u.id}>
-            {/* The URL from your database will now be the Cloudinary URL */}
             <a href={u.url} target="_blank" rel="noopener noreferrer">{u.title}</a>
             <span> by {u.user.name}</span>
             <button onClick={() => del(u.id)}>Delete</button>
