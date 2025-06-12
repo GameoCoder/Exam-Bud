@@ -52,11 +52,11 @@ export default function UploadModal({ open, onClose, onComplete, title }) {
     formData.append("public_id", title);
 
     const xhr = new XMLHttpRequest();
-    const CLOUDINARY_PUBLIC_ID=process.env.CLOUDINARY_PUBLIC_ID
+    const CLOUDINARY_PUBLIC_ID=import.meta.env.VITE_CLOUDINARY_PUBLIC_ID
     xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY_PUBLIC_ID}/upload`);
 
     // Event listener for upload progress
-    xhr.upload.onprogress = (event) => {
+    xhr.upload.onprogress = (event) => { 
       if (event.lengthComputable) {
         const pct = Math.round((event.loaded * 100) / event.total);
         setProgress(pct);

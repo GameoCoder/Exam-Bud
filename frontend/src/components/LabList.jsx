@@ -19,7 +19,7 @@ export default function LabList({ subjectId }) {
       url: cloudinaryUrl
     };
 
-    await fetch(`http://localhost:4000/subjects/${subjectId}/uploads`, {
+    await fetch(`http://localhost:4000/subjects/${subjectId}/labs`, {
       method: 'POST',
       headers: { 
         'x-user-id': 1, 
@@ -33,7 +33,7 @@ export default function LabList({ subjectId }) {
   };
 
   const del = async id => {
-    await fetch(`http://localhost:4000/uploads/${id}`, { method: 'DELETE' });
+    await fetch(`http://localhost:4000/labs/${id}`, { method: 'DELETE' });
     load();
   };
 
@@ -57,7 +57,7 @@ export default function LabList({ subjectId }) {
       <form onSubmit={add}>
         <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Title" required/>
         {/* <input type="file" onChange={e=>setFile(e.target.files[0])} required/> */}
-        <button type="submit" onClick={handleButtonClick} disabled={title.trim()===""}>Upload Lab</button>
+        <button type="button" onClick={handleButtonClick} disabled={title.trim()===""}>Upload Lab</button>
         <UploadModal 
           open={modalOpen}
           onClose={() => setmodalOpen(false)}
@@ -68,7 +68,7 @@ export default function LabList({ subjectId }) {
       <ul>
         {labs.map(l=>(
           <li key={l.id}>
-            <a href={`http://localhost:4000${l.url}`} target="_blank">{l.title}</a>
+            <a href={l.url} target="_blank" rel="noopener noreferrer">{l.title}</a>
             <span> by {l.user.name}</span>
             <button onClick={()=>del(l.id)}>Delete</button>
           </li>
