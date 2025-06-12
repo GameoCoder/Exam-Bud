@@ -1,4 +1,3 @@
-// uploadController.js
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 require('dotenv').config();
@@ -7,7 +6,6 @@ const { ApiError } = require('../utils/ApiError');
 const { ApiResponse } = require('../utils/ApiResponse');
 const { asyncHandler } = require('../utils/asyncHandler');
 
-//TODO :- Fetch File list using prisma db
 const fetchUploads = asyncHandler(async (req, res, next) => {
   const uploads = await prisma.upload.findMany({
     where: { subjectId: +req.params.sid },
@@ -17,15 +15,11 @@ const fetchUploads = asyncHandler(async (req, res, next) => {
 });
 
 const uploadMaterial = asyncHandler(async (req, res, next) => {
-    // Now expecting 'title' and 'url' directly in the request body (JSON payload from frontend)
-    const { title, url } = req.body; // Destructure both title and url
+    const { title, url } = req.body;
 
-    // Validate that both are present
     if (!title || !url) {
       return next(new ApiError(400, "Title and Cloudinary URL are required"));
     }
-
-    // No need for req.file or constructing local file paths anymore
 
     const upload = await prisma.upload.create({
       data: {

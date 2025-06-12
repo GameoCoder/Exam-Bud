@@ -36,7 +36,7 @@ export default function UploadList({ subjectId }) {
     load();
   };
 
-  const handleUploadComplete = async ({ url, public_id}) => {
+  const handleUploadComplete = async ({ url, public_id }) => {
     await add(public_id, url);
     setTitle("")
     setmodalOpen(false)
@@ -46,9 +46,9 @@ export default function UploadList({ subjectId }) {
     if (title.trim() === "") {
       alert("Please enter a title before uploading.")
       return
-  }
+    }
   setmodalOpen(true)
-}
+  }
 
   return (
     <div>
