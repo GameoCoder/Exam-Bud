@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import { useDropzone } from "react-dropzone";
 import "./uploadModal.css"; // Ensure your CSS is imported
 
-<<<<<<< HEAD
 export default function UploadModal({ open, onClose, onComplete }) {
   // State to manage the modal's workflow:
   // "initial": User can drop/select file
@@ -16,13 +15,6 @@ export default function UploadModal({ open, onClose, onComplete }) {
   const [progress, setProgress] = useState(0);
   const fileInputRef = useRef(null); // Ref for the hidden file input
   const [cloudinaryResponse, setCloudinaryResponse] = useState(null); // To store upload response data
-=======
-export default function UploadModal({ open, onClose, onComplete, title }) {
-  const [stage, setStage] = useState("initial");
-  const [file, setFile] = useState(null);
-  const [progress, setProgress] = useState(0);
-  const [uploadedUrl, setUploadedUrl] = useState(null);
->>>>>>> ce9b31c1df67ad8308159a68b5f2c272fb804c8b
 
   // Callback when a file is dropped or selected
   const onDrop = useCallback((acceptedFiles) => {
@@ -40,7 +32,6 @@ export default function UploadModal({ open, onClose, onComplete, title }) {
     noClick: true, // Prevents default click behavior on the dropzone area
   });
 
-<<<<<<< HEAD
   // Function to manually trigger the hidden file input click
   const handleBrowseClick = () => {
     fileInputRef.current.click();
@@ -70,48 +61,6 @@ export default function UploadModal({ open, onClose, onComplete, title }) {
         setProgress(pct);
       }
     };
-=======
-  useEffect(() => {
-    if (stage !== "uploading" || !file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "cloudsave");
-    formData.append("public_id", title); // Use title as public_id
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://api.cloudinary.com/v1_1/dliibgsez/upload");
-
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const pct = Math.round((event.loaded * 100) / event.total);
-        setProgress(pct);
-      }
-    };
-
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const response = JSON.parse(xhr.response);
-        console.log("Upload success:", response);
-        setUploadedUrl(response.secure_url);
-        setProgress(100);
-        setStage("success");
-      } else {
-        console.error("Upload failed:", xhr.responseText);
-        alert("Upload failed.");
-        setStage("initial");
-      }
-    };
-
-    xhr.onerror = () => {
-      console.error("Upload error");
-      alert("Upload failed.");
-      setStage("initial");
-    };
-
-    xhr.send(formData);
-  }, [stage, file, title]);
->>>>>>> ce9b31c1df67ad8308159a68b5f2c272fb804c8b
 
     // Event listener for upload completion
     xhr.onload = () => {
@@ -148,18 +97,8 @@ export default function UploadModal({ open, onClose, onComplete, title }) {
 
   // Handler for the "Next" button click (after successful upload)
   const handleNext = () => {
-<<<<<<< HEAD
     onComplete?.(cloudinaryResponse); // Pass Cloudinary response to parent
     onClose?.(); // Close the modal
-=======
-    if (uploadedUrl) {
-      onComplete?.({
-        url: uploadedUrl,
-        public_id: title,
-      });
-      onClose?.();
-    }
->>>>>>> ce9b31c1df67ad8308159a68b5f2c272fb804c8b
   };
 
   // Utility function to format file size
