@@ -1,4 +1,3 @@
----
 ```
 ⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⣶⣶⣤⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀  
 ⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠀⠀⠈⠉⠛⠿⣷⣄⠀⠀⠀⠀⠀⠀  
@@ -50,7 +49,7 @@ If you're still here, welcome to the **scuffed but soulful** edition.
 sudo systemctl start docker.service
 ```
 
-> *"If you see 'systemctl: command not found', i need you to know, I USE ARCH BTW"*
+> *"If you see 'systemctl: command not found', i need you to know, I USE ARCH BTW"*<br>
 > *“If you see ‘cannot connect to daemon’, summon it harder.”*
 
 #### Step 2: Channel the Containers
@@ -88,3 +87,9 @@ chmod +x run.sh
 ---
 
 If this doesn't get you hired, I don’t know what will. 🐸👌
+
+
+Number of issues fixed - above 99
+0 - Ansh ki gaand
+1 - frontend/src/components/LabList.jsx 
+        previous - NO DELETE function, added a delete function
