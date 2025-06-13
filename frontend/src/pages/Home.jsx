@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../components/NavBar';
 
 export default function Home() {
   const [branches, setBranches] = useState([]);
@@ -10,6 +11,7 @@ export default function Home() {
   }, []);
   return (
     <div>
+      <Navbar />
       <h2>Branches</h2>
       <ul>
         {branches.map(b =>
